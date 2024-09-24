@@ -205,3 +205,47 @@ class Library {
             }
             return false;
         }
+
+        public void undo() {
+            if (!undoStack.isEmpty()) {
+                books = undoStack.pop();
+            }
+        }
+
+        public String get(int index) {
+            if (index < 0 || index >= books.size()) {
+                throw new IndexOutOfBoundsException("Index out of bounds");
+            }
+            return books.get(index);
+        }
+
+        public int size() {
+            return books.size();
+        }
+
+        public String displayBooks() {
+            if (books.isEmpty()) {
+                return "No books available.";
+            }
+            String[] bookArray = books.toArray(new String[0]);
+            insertionSort(bookArray);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < bookArray.length; i++) {
+                sb.append((i + 1)).append(". ").append(bookArray[i]).append("\n");
+            }
+            return sb.toString();
+        }
+
+        private void insertionSort(String[] array) {
+            int n = array.length;
+            for (int i = 1; i < n ; ++i) {
+                String key = array[i];
+                int j = i - 1;
+                while (j >= 0 && array[j].compareTo(key) > 0) {
+                    array[j + 1] = array[j];
+                    j = j - 1;
+                }
+                array[j + 1] = key;
+            }
+        }
+    }
