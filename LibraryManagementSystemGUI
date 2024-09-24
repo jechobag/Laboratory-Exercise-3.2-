@@ -176,3 +176,32 @@ ________________________________________________________________________________
         // Initialize the GUI
         setVisible(true);
     }
+
+class Library {
+        private ArrayList<String> books;
+        private final Stack<ArrayList<String>> undoStack;
+
+        public Library() {
+            books = new ArrayList<>();
+            undoStack = new Stack<>();
+        }
+
+        public void add(String book) {
+            undoStack.push(new ArrayList<>(books));
+            int index = 0;
+            while (index < books.size() && books.get(index).compareTo(book) < 0) {
+                index++;
+            }
+            books.add(index, book);
+        }
+
+        public boolean remove(String book) {
+            undoStack.push(new ArrayList<>(books));
+            for (int i = 0; i < books.size(); i++) {
+                if (books.get(i).equalsIgnoreCase(book)) {
+                    books.remove(i);
+                    return true;
+                }
+            }
+            return false;
+        }
