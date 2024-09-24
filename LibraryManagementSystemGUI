@@ -129,3 +129,4 @@ public class LibraryManagementSystemGUI extends JFrame {
         inputPanel.add(indexField, gbc_indexField);
         getContentPane().add(new JScrollPane(displayArea), BorderLayout.CENTER);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+________________________________________________________________________________________
