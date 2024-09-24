@@ -1,1 +1,131 @@
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Stack;
 
+public class LibraryManagementSystemGUI extends JFrame {
+    private Library library = new Library();
+
+    public LibraryManagementSystemGUI() {
+        ImageIcon img = new ImageIcon(LibraryManagementSystemGUI.class.getResource("/book blue.png"));
+        this.setIconImage(img.getImage());
+
+        setTitle("Library Management System");
+        setSize(600, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        // Set Look and Feel
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+        }
+        JTextArea displayArea = new JTextArea(15, 40);
+        displayArea.setEditable(false);
+        displayArea.setFont(new Font("SansSerif", Font.BOLD, 14));
+        displayArea.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        displayArea.setBackground(new Color(216, 216, 216)); // Set background color
+
+        JButton addButton = new JButton("Add Book");
+        JButton removeButton = new JButton("Remove Book by Title");
+        JButton searchButton = new JButton("Search Book by Index");
+        JButton displayButton = new JButton("Display All Books");
+        JButton totalButton = new JButton("Total Number of Books");
+        JButton undoButton = new JButton("Undo");
+        JButton exitButton = new JButton("Exit"); // Exit button
+
+        // Set font, background color, and border for buttons
+        Font buttonFont = new Font("SansSerif", Font.BOLD, 14);
+        Color buttonColor = new Color(22,102,186);
+
+        JButton[] buttons = {addButton, removeButton, searchButton, displayButton, totalButton, undoButton, exitButton};
+        for (JButton button : buttons) {
+            button.setFont(buttonFont);
+            button.setBackground(buttonColor);
+            button.setForeground(Color.WHITE);
+            button.setOpaque(true); // Ensures the background color is painted
+            button.setBorderPainted(false); // Disables the border painting
+            button.setFocusPainted(false);  // Removes the focus border
+        }
+
+        // Create a font for labels
+        Font labelFont = new Font("SansSerif", Font.BOLD, 14);
+
+        // Layout setup
+        getContentPane().setLayout(new BorderLayout());
+        getContentPane().setBackground(Color.GRAY); // Set background color of the frame
+
+        JPanel inputPanel = new JPanel();
+        inputPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        inputPanel.setBackground(new Color(22, 102, 186)); // Set background color of the input panel
+        GridBagLayout gbl_inputPanel = new GridBagLayout();
+        gbl_inputPanel.columnWidths = new int[]{277, 87, 200, 0};
+        gbl_inputPanel.rowHeights = new int[]{20, 20, 0};
+        gbl_inputPanel.columnWeights = new double[]{1.0, 0.0, 1.0, Double.MIN_VALUE};
+        gbl_inputPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+        inputPanel.setLayout(gbl_inputPanel);
+
+        JLabel LogoPic = new JLabel("Library Management System");
+        LogoPic.setFont(new Font("SansSerif", Font.BOLD, 16));
+        LogoPic.setForeground(Color.WHITE);
+        LogoPic.setIcon(new ImageIcon(LibraryManagementSystemGUI.class.getResource("/book.png")));
+        GridBagConstraints gbc_LogoPic = new GridBagConstraints();
+        gbc_LogoPic.gridheight = 2;
+        gbc_LogoPic.insets = new Insets(0, 0, 5, 5);
+        gbc_LogoPic.gridx = 0;
+        gbc_LogoPic.gridy = 0;
+        inputPanel.add(LogoPic, gbc_LogoPic);
+
+        JLabel bookLabel = new JLabel("Book Title:");
+        bookLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        bookLabel.setForeground(Color.WHITE);
+        bookLabel.setFont(labelFont); // Set font for book title label
+
+        GridBagConstraints gbc_bookLabel = new GridBagConstraints();
+        gbc_bookLabel.fill = GridBagConstraints.BOTH;
+        gbc_bookLabel.insets = new Insets(0, 0, 5, 5);
+        gbc_bookLabel.gridx = 1;
+        gbc_bookLabel.gridy = 0;
+        inputPanel.add(bookLabel, gbc_bookLabel);
+
+        // Create components
+        JTextField bookField = new JTextField(20);
+        GridBagConstraints gbc_bookField = new GridBagConstraints();
+        gbc_bookField.fill = GridBagConstraints.BOTH;
+        gbc_bookField.insets = new Insets(0, 0, 5, 0);
+        gbc_bookField.gridx = 2;
+        gbc_bookField.gridy = 0;
+        inputPanel.add(bookField, gbc_bookField);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(4, 2, 10 , 10));
+        buttonPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        buttonPanel.setBackground(Color.WHITE); // Set background color of the button panel
+        buttonPanel.add(addButton);
+        buttonPanel.add(removeButton);
+        buttonPanel.add(searchButton);
+        buttonPanel.add(displayButton);
+        buttonPanel.add(totalButton);
+        buttonPanel.add(undoButton);
+        buttonPanel.add(exitButton); // Add exit button to the panel
+
+        getContentPane().add(inputPanel, BorderLayout.NORTH);
+        JLabel indexLabel = new JLabel("Index:");
+        indexLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        indexLabel.setForeground(Color.WHITE);
+        indexLabel.setFont(labelFont); // Set font for index label
+        GridBagConstraints gbc_indexLabel = new GridBagConstraints();
+        gbc_indexLabel.fill = GridBagConstraints.BOTH;
+        gbc_indexLabel.insets = new Insets(0, 0, 0, 5);
+        gbc_indexLabel.gridx = 1;
+        gbc_indexLabel.gridy = 1;
+        inputPanel.add(indexLabel, gbc_indexLabel);
+        JTextField indexField = new JTextField(5);
+        GridBagConstraints gbc_indexField = new GridBagConstraints();
+        gbc_indexField.fill = GridBagConstraints.BOTH;
+        gbc_indexField.gridx = 2;
+        gbc_indexField.gridy = 1;
+        inputPanel.add(indexField, gbc_indexField);
+        getContentPane().add(new JScrollPane(displayArea), BorderLayout.CENTER);
+        getContentPane().add(buttonPanel, BorderLayout.SOUTH);
